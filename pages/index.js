@@ -1,3 +1,4 @@
+import Link from "next/link";
 import useSWR from "swr";
 import { gql } from "graphql-request";
 import { graphQLClient } from "../utils/graphql-client";
@@ -32,6 +33,19 @@ export default function Home() {
               <span>{todo.task}</span>
             </li>
           ))}
+          <li>
+            <Link href="/new">
+              <a
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  fontWeight: 700,
+                }}
+              >
+                Create New Todo
+              </a>
+            </Link>
+          </li>
         </ul>
       ) : (
         <div>Loading...</div>
