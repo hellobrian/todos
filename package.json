@@ -8,8 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "faunadb": "^3.0.1",
+    "graphql": "^15.3.0",
+    "graphql-request": "^3.0.0",
     "next": "9.5.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-hook-form": "^6.6.0",
+    "swr": "^0.3.1"
   }
 }
