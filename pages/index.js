@@ -25,27 +25,32 @@ export default function Home() {
 
   return (
     <Layout>
-      <h1 className={styles.title}>Todos</h1>
+      <h1 className={styles.title} style={{ marginBottom: 32 }}>
+        Todos
+      </h1>
+      <div style={{ marginBottom: 16 }}>
+        <Link href="/new">
+          <a
+            style={{
+              color: "white",
+              background: "blue",
+              padding: 16,
+              fontWeight: 700,
+            }}
+          >
+            Create New Todo
+          </a>
+        </Link>
+      </div>
       {data ? (
         <ul>
           {data.allTodos.data.map((todo) => (
             <li key={todo._id}>
-              <span>{todo.task}</span>
+              <Link href="/todo/[id]" as={`/todo/${todo._id}`}>
+                <a>{todo.task}</a>
+              </Link>
             </li>
           ))}
-          <li>
-            <Link href="/new">
-              <a
-                style={{
-                  color: "blue",
-                  textDecoration: "underline",
-                  fontWeight: 700,
-                }}
-              >
-                Create New Todo
-              </a>
-            </Link>
-          </li>
         </ul>
       ) : (
         <div>Loading...</div>
