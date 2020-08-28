@@ -6,7 +6,6 @@ export function Layout({ children }) {
     <>
       <Head>
         <title>Todos</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className={styles.container}>
         <main className={styles.main}>{children}</main>
