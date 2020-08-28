@@ -1,4 +1,4 @@
-# Todos
+# [Todos](https://hellobrian-todos.netlify.app/)
 
 A basic todo app using Next.js and FaunaDB with GraphQL.
 
