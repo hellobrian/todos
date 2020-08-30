@@ -1,16 +1,17 @@
-import { useState } from "react";
-import Router from "next/router";
-import { gql } from "graphql-request";
-import { useForm } from "react-hook-form";
-import { Layout } from "../components/layout";
-import { graphQLClient } from "../utils/graphql-client";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { gql } from 'graphql-request';
+import Router from 'next/router';
 
-export default function New() {
-  const [errorMessage, setErrorMessage] = useState("");
+import { Layout } from 'components';
+import { graphQLClient } from 'utils/graphql-client';
+
+export default function New(): JSX.Element {
+  const [errorMessage, setErrorMessage] = useState('');
   const { handleSubmit, register, errors } = useForm();
 
   const onSubmit = handleSubmit(async ({ task }) => {
-    if (errorMessage) setErrorMessage("");
+    if (errorMessage) setErrorMessage('');
 
     const query = gql`
       mutation CreateATodo($task: String!) {
@@ -23,8 +24,9 @@ export default function New() {
 
     try {
       await graphQLClient.request(query, { task });
-      Router.push("/");
+      Router.push('/');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       setErrorMessage(error.message);
     }
@@ -41,10 +43,10 @@ export default function New() {
             id="task"
             type="text"
             name="task"
-            ref={register({ required: "Task is required " })}
+            ref={register({ required: 'Task is required ' })}
           />
           {errors.task && (
-            <span role="alert" style={{ color: "red" }}>
+            <span role="alert" style={{ color: 'red' }}>
               {errors.task.message}
             </span>
           )}

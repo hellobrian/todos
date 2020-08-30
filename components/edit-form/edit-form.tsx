@@ -1,20 +1,31 @@
-import { useState, useEffect } from "react";
-import Router from "next/router";
-import { gql } from "graphql-request";
-import { useForm } from "react-hook-form";
-import { graphQLClient } from "../utils/graphql-client";
+import React, { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { gql } from 'graphql-request';
+import Router from 'next/router';
 
-export default function EditForm({ defaultValues, id }) {
-  const [errorMessage, setErrorMessage] = useState("");
+import { graphQLClient } from 'utils/graphql-client';
 
-  const { handleSubmit, register, reset, errors } = useForm({
+type FormData = {
+  completed: boolean;
+  task: string;
+};
+
+type EditFormProps = {
+  id: string | string[];
+  defaultValues: FormData;
+};
+
+export const EditForm: React.FC<EditFormProps> = ({ defaultValues, id }) => {
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const { handleSubmit, register, reset, errors } = useForm<FormData>({
     defaultValues: {
-      ...defaultValues,
-    },
+      ...defaultValues
+    }
   });
 
   const onSubmit = handleSubmit(async ({ task, completed }) => {
-    if (errorMessage) setErrorMessage("");
+    if (errorMessage) setErrorMessage('');
 
     const query = gql`
       mutation UpdateATodo($id: ID!, $task: String!, $completed: Boolean!) {
@@ -28,13 +39,14 @@ export default function EditForm({ defaultValues, id }) {
     const variables = {
       id,
       task,
-      completed,
+      completed
     };
 
     try {
       await graphQLClient.request(query, variables);
-      Router.push("/");
+      Router.push('/');
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
       setErrorMessage(error.message);
     }
@@ -53,22 +65,15 @@ export default function EditForm({ defaultValues, id }) {
             type="text"
             name="task"
             id="task"
-            ref={register({ required: "Task is required" })}
+            ref={register({ required: 'Task is required' })}
           />
           {errors.task && <span role="alert">{errors.task.message}</span>}
         </div>
 
         <div>
           <label htmlFor="completed">Completed</label>
-          <input
-            type="checkbox"
-            name="completed"
-            id="completed"
-            ref={register()}
-          />
-          {errors.completed && (
-            <span role="alert">{errors.completed.message}</span>
-          )}
+          <input type="checkbox" name="completed" id="completed" ref={register()} />
+          {errors.completed && <span role="alert">{errors.completed.message}</span>}
         </div>
 
         <div>
@@ -79,4 +84,4 @@ export default function EditForm({ defaultValues, id }) {
       {errorMessage && <p role="alert">{errorMessage}</p>}
     </>
   );
-}
+};

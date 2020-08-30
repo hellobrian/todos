@@ -4,5 +4,11 @@
 
 A basic todo app using Next.js and FaunaDB with GraphQL.
 
-- https://medium.com/technest/crud-app-with-next-js-faunadb-and-graphql-388be7141bee
-- https://kjmczk.dev/blog/crud-app-with-next-js-faunadb-and-graphql/
+-   https://medium.com/technest/crud-app-with-next-js-faunadb-and-graphql-388be7141bee
+-   https://kjmczk.dev/blog/crud-app-with-next-js-faunadb-and-graphql/
+
+Setup TypeScript with ESLint and Prettier:
+
+-   https://nextjs.org/docs/basic-features/typescript
+-   https://dev.to/arpit73/eslint-and-prettier-for-react-apps-bonus-next-js-and-typescript-3e46
+-   [Custom app and document using TypeScript](https://github.com/vercel/next.js/pull/16702#issuecomment-683461464)

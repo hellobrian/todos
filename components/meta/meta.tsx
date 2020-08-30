@@ -1,6 +1,12 @@
-import Document, { Html, Head, Main, NextScript } from "next/document";
+type MetaProps = {
+  name?: string;
+  description?: string;
+};
 
-function Meta({ name = "Todos", description = "Best PWA App in the world" }) {
+export const Meta = ({
+  name = 'Todos',
+  description = 'Best PWA App in the world'
+}: MetaProps): JSX.Element => {
   return (
     <>
       <meta name="application-name" content={name} />
@@ -21,23 +27,9 @@ function Meta({ name = "Todos", description = "Best PWA App in the world" }) {
         name="viewport"
         content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
       />
-      <link
-        rel="apple-touch-icon"
-        sizes="192x192"
-        href="/android-chrome-192x192.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="32x32"
-        href="/favicon-32x32.png"
-      />
-      <link
-        rel="icon"
-        type="image/png"
-        sizes="16x16"
-        href="/favicon-16x16.png"
-      />
+      <link rel="apple-touch-icon" sizes="192x192" href="/android-chrome-192x192.png" />
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
       <link rel="manifest" href="/manifest.json" />
       {/* <link
         rel="mask-icon"
@@ -45,10 +37,7 @@ function Meta({ name = "Todos", description = "Best PWA App in the world" }) {
         color="#5bbad5"
       /> */}
       <link rel="shortcut icon" href="/favicon.ico" />
-      <link
-        rel="stylesheet"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
-      />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
       {/* <meta name="twitter:card" content="summary" />
       <meta name="twitter:url" content="https://yourdomain.com" />
       <meta name="twitter:title" content="PWA App" />
@@ -69,28 +58,4 @@ function Meta({ name = "Todos", description = "Best PWA App in the world" }) {
       /> */}
     </>
   );
-}
-
-class MyDocument extends Document {
-  static async getInitialProps(ctx) {
-    const initialProps = await Document.getInitialProps(ctx);
-    return { ...initialProps };
-  }
-
-  render() {
-    return (
-      <Html>
-        <Head>
-          <link rel="icon" href="/favicon.ico" />
-          <Meta></Meta>
-        </Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    );
-  }
-}
-
-export default MyDocument;
+};

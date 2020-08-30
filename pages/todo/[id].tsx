@@ -1,11 +1,11 @@
-import { useRouter } from "next/router";
-import useSWR from "swr";
-import { gql } from "graphql-request";
-import { Layout } from "../../components/layout";
-import EditForm from "../../components/edit-form";
-import { graphQLClient } from "../../utils/graphql-client";
+import { gql } from 'graphql-request';
+import { useRouter } from 'next/router';
+import useSWR from 'swr';
 
-export default function Todo() {
+import { EditForm, Layout } from 'components';
+import { graphQLClient } from 'utils/graphql-client';
+
+const Todo = (): JSX.Element => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -35,4 +35,6 @@ export default function Todo() {
       )}
     </Layout>
   );
-}
+};
+
+export default Todo;
