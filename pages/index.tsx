@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { gql } from 'graphql-request';
+import { NextApiRequest } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 import { Layout } from 'components';
@@ -7,10 +10,15 @@ import { getAuthCookie } from 'utils/auth-cookies';
 import { graphQLClient } from 'utils/graphql-client';
 import styles from './index.module.css';
 
+type Owner = {
+  _id: string;
+};
+
 type Todo = {
   _id: string;
   completed: boolean;
   task: string;
+  owner: Owner;
 };
 
 type HomeProps = {
@@ -18,6 +26,13 @@ type HomeProps = {
 };
 
 export default function Home({ token }: HomeProps): JSX.Element {
+  const { data: user } = useSWR('/api/user');
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [router, user]);
   const fetcher = async (query: string) => await graphQLClient(token).request(query);
   const { data, mutate } = useSWR(
     gql`
@@ -27,6 +42,9 @@ export default function Home({ token }: HomeProps): JSX.Element {
             _id
             task
             completed
+            owner {
+              _id
+            }
           }
         }
       }
@@ -129,8 +147,12 @@ export default function Home({ token }: HomeProps): JSX.Element {
   );
 }
 
+type ContextType = {
+  req: NextApiRequest;
+};
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function getServerSideProps(ctx) {
+export async function getServerSideProps(ctx: ContextType) {
   const token = getAuthCookie(ctx.req);
   return { props: { token: token || null } };
 }

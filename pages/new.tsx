@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { gql } from 'graphql-request';
-import Router from 'next/router';
-import useSWR from 'swr'; // add
+import Router, { useRouter } from 'next/router';
+import useSWR from 'swr';
 
 import { Layout } from 'components';
 import { graphQLClient } from 'utils/graphql-client';
@@ -12,7 +12,13 @@ type NewProps = {
 };
 
 export default function New({ token }: NewProps): JSX.Element {
-  const { data: user } = useSWR('/api/user'); // add
+  const { data: user } = useSWR('/api/user');
+  const router = useRouter();
+  useEffect(() => {
+    if (!user) {
+      router.push('/login');
+    }
+  }, [router, user]);
   const [errorMessage, setErrorMessage] = useState('');
   const { handleSubmit, register, errors } = useForm();
 
@@ -46,7 +52,7 @@ export default function New({ token }: NewProps): JSX.Element {
     }
   });
 
-  return (
+  return user ? (
     <Layout>
       <h1>Create New Todo</h1>
 
@@ -72,5 +78,7 @@ export default function New({ token }: NewProps): JSX.Element {
       </form>
       {errorMessage && <p role="alert">{errorMessage}</p>}
     </Layout>
+  ) : (
+    <h1>Redirecting...</h1>
   );
 }
