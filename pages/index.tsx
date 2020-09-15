@@ -3,10 +3,9 @@ import Link from 'next/link';
 import useSWR from 'swr';
 
 import { Layout } from 'components';
+import { getAuthCookie } from 'utils/auth-cookies';
 import { graphQLClient } from 'utils/graphql-client';
 import styles from './index.module.css';
-
-const fetcher = async (query) => await graphQLClient.request(query);
 
 type Todo = {
   _id: string;
@@ -14,7 +13,12 @@ type Todo = {
   task: string;
 };
 
-export default function Home(): JSX.Element {
+type HomeProps = {
+  token: string;
+};
+
+export default function Home({ token }: HomeProps): JSX.Element {
+  const fetcher = async (query: string) => await graphQLClient(token).request(query);
   const { data, mutate } = useSWR(
     gql`
       {
@@ -31,7 +35,7 @@ export default function Home(): JSX.Element {
   );
 
   const toggleTodo = async (id: string, completed: boolean) => {
-    const query = gql`
+    const mutation = gql`
       mutation PartialUpdateTodo($id: ID!, $completed: Boolean!) {
         partialUpdateTodo(id: $id, data: { completed: $completed }) {
           _id
@@ -46,7 +50,9 @@ export default function Home(): JSX.Element {
     };
 
     try {
-      await graphQLClient.request(query, variables);
+      await graphQLClient(token)
+        .setHeader('X-Schema-Preview', 'partial-update-mutation')
+        .request(mutation, variables);
       mutate();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -55,7 +61,7 @@ export default function Home(): JSX.Element {
   };
 
   const deleteATodo = async (id: string) => {
-    const query = gql`
+    const mutation = gql`
       mutation DeleteATodo($id: ID!) {
         deleteTodo(id: $id) {
           _id
@@ -64,7 +70,7 @@ export default function Home(): JSX.Element {
     `;
 
     try {
-      await graphQLClient.request(query, { id });
+      await graphQLClient(token).request(mutation, { id });
       mutate();
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -121,4 +127,10 @@ export default function Home(): JSX.Element {
       )}
     </Layout>
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export async function getServerSideProps(ctx) {
+  const token = getAuthCookie(ctx.req);
+  return { props: { token: token || null } };
 }

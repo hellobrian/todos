@@ -2,28 +2,42 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { gql } from 'graphql-request';
 import Router from 'next/router';
+import useSWR from 'swr'; // add
 
 import { Layout } from 'components';
 import { graphQLClient } from 'utils/graphql-client';
 
-export default function New(): JSX.Element {
+type NewProps = {
+  token: string;
+};
+
+export default function New({ token }: NewProps): JSX.Element {
+  const { data: user } = useSWR('/api/user'); // add
   const [errorMessage, setErrorMessage] = useState('');
   const { handleSubmit, register, errors } = useForm();
 
   const onSubmit = handleSubmit(async ({ task }) => {
     if (errorMessage) setErrorMessage('');
 
-    const query = gql`
-      mutation CreateATodo($task: String!) {
-        createTodo(data: { task: $task, completed: false }) {
+    const mutation = gql`
+      mutation CreateATodo($task: String!, $owner: ID!) {
+        createTodo(data: { task: $task, completed: false, owner: { connect: $owner } }) {
           task
           completed
+          owner {
+            _id
+          }
         }
       }
     `;
 
+    const variables = {
+      task,
+      owner: user && user.id
+    };
+
     try {
-      await graphQLClient.request(query, { task });
+      await graphQLClient(token).request(mutation, variables);
       Router.push('/');
     } catch (error) {
       // eslint-disable-next-line no-console

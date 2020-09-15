@@ -13,9 +13,10 @@ type FormData = {
 type EditFormProps = {
   id: string | string[];
   defaultValues: FormData;
+  token: string;
 };
 
-export const EditForm: React.FC<EditFormProps> = ({ defaultValues, id }) => {
+export const EditForm = ({ defaultValues, id, token }: EditFormProps): JSX.Element => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const { handleSubmit, register, reset, errors } = useForm<FormData>({
@@ -43,7 +44,7 @@ export const EditForm: React.FC<EditFormProps> = ({ defaultValues, id }) => {
     };
 
     try {
-      await graphQLClient.request(query, variables);
+      await graphQLClient(token).request(query, variables);
       Router.push('/');
     } catch (error) {
       // eslint-disable-next-line no-console
