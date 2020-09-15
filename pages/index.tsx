@@ -10,15 +10,10 @@ import { getAuthCookie } from 'utils/auth-cookies';
 import { graphQLClient } from 'utils/graphql-client';
 import styles from './index.module.css';
 
-type Owner = {
-  _id: string;
-};
-
 type Todo = {
   _id: string;
   completed: boolean;
   task: string;
-  owner: Owner;
 };
 
 type HomeProps = {
@@ -42,9 +37,6 @@ export default function Home({ token }: HomeProps): JSX.Element {
             _id
             task
             completed
-            owner {
-              _id
-            }
           }
         }
       }
