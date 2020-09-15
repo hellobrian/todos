@@ -6,6 +6,7 @@ A basic todo app using Next.js and FaunaDB with GraphQL.
 
 -   https://medium.com/technest/crud-app-with-next-js-faunadb-and-graphql-388be7141bee
 -   https://kjmczk.dev/blog/crud-app-with-next-js-faunadb-and-graphql/
+-   https://dev.to/kjmczk/implement-faunadb-authentication-in-next-js-and-graphql-app-4pfg
 
 Setup TypeScript with ESLint and Prettier:
 
